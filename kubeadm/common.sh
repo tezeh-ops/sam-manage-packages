@@ -2,7 +2,7 @@
 #i1) Switch to root user [ sudo -i]
 
 sudo hostnamectl set-hostname  node1
-
+ sudo -i
 #2) Disable swap & add kernel settings
 
 swapoff -a
