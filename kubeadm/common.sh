@@ -103,9 +103,6 @@ systemctl daemon-reload
 systemctl start kubelet
 systemctl enable kubelet.service
 
-# just to enable the port forwarding
-
-echo 1 > /proc/sys/net/ipv4/ip_forward
 
 # Joing the Node to the Master Control-Plane 
 
