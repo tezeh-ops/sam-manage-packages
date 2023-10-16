@@ -104,7 +104,7 @@ systemctl start kubelet
 systemctl enable kubelet.service
 
 
-# Joing the Node to the Master Control-Plane 
+# Joing the Node to the Master Control-Plane { make sure you copy this token from the master node }
 
 kubeadm join 172.31.81.157:6443 --token qrnbgf.uklnargrenc1vylv \
         --discovery-token-ca-cert-hash sha256:c03821fef164f0eb551ec013a842e44ab8888d31a71a6407488f558e4d42794f
