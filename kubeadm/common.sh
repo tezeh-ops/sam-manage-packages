@@ -3,6 +3,7 @@
 
 sudo hostnamectl set-hostname  node1
  sudo -i
+ 
 #2) Disable swap & add kernel settings
 
 swapoff -a
@@ -25,7 +26,7 @@ net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF
 
-sysctl --system
+#sysctl --system
 
 #4) Install containerd run time
 
@@ -36,6 +37,7 @@ apt-get install ca-certificates curl gnupg lsb-release -y
 
 #Note: We are not installing Docker Here.Since containerd.io package is part of docker apt repositories hence we added docker repository & it's key to download and install containerd.
 # Add Docker’s official GPG key:
+
 sudo mkdir -p /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
@@ -81,6 +83,11 @@ curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cl
 
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
+#OR This the new version of the two above commands 
+
+ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/kubernetes-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list > /dev/null
+
 # Update apt package index, install kubelet, kubeadm and kubectl, and pin their version:
 
 apt-get update
@@ -96,5 +103,15 @@ systemctl daemon-reload
 systemctl start kubelet
 systemctl enable kubelet.service
 
-sudo kubeadm join 10.0.0.6:6443 --token xmzufh.e0nu3kb5ohijfxyh \
-        --discovery-token-ca-cert-hash sha256:579b6a53bd00c8483f5150b9fb521b6431fc38b1ac716b8b9a5f668928a93771
+# just to enable the port forwarding
+
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# Joing the Node to the Master Control-Plane 
+
+kubeadm join 172.31.81.157:6443 --token qrnbgf.uklnargrenc1vylv \
+        --discovery-token-ca-cert-hash sha256:c03821fef164f0eb551ec013a842e44ab8888d31a71a6407488f558e4d42794f
+
+
+sudo su - ubuntu
+
